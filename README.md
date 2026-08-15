@@ -33,25 +33,3 @@ MME inventory in SQLite, importable and exportable as CSV, with a polygon
 selection-preview endpoint for later CAP-to-cell mapping — see
 [cell-inventory.md](docs/cell-inventory.md).
 
-## Web UI
-
-`web/dist` (the built UI) is committed to git, so `make build` / `go build`
-work with only the Go toolchain - Node is only needed to modify the UI:
-
-```sh
-make ui       # cd web && npm install && npm run build
-make dev-ui   # Vite dev server, proxies /v1, /healthz, /readyz, /metrics to :8087
-```
-
-## References
-
-- `docs/specs/ts_23041_rel19.zip` — TS 23.041, Cell Broadcast Service behavior.
-- `docs/specs/ts_29168_rel19.zip` — TS 29.168, CBC/EPC (SBcAP) interface.
-- `docs/specs/23003-j30.zip` — TS 23.003, numbering/addressing (cell identity encoding).
-- `docs/architecture.md` describes the current boundary and delivery roadmap.
-- `docs/cell-inventory.md` describes the LTE cell-inventory CSV format and API.
-
-## Release gate
-
-Run `make verify VERSION=<release-version>` before a release. The detailed
-operator acceptance checklist is in [release qualification](docs/release-qualification.md).
