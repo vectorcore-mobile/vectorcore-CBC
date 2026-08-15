@@ -152,15 +152,6 @@ contributes zero cells rather than erroring, so one unrecognized `<geocode>`
 in an alert never blocks the rest of that alert's targeting. The web UI's
 **Geo Codes** page covers both the registry and the cell-mapping table.
 
-## Web UI
-
-`web/dist` (the built UI) is committed to git, so `make build` / `go build`
-work with only the Go toolchain - Node is only needed to modify the UI:
-
-```sh
-make ui       # cd web && npm install && npm run build
-make dev-ui   # Vite dev server, proxies /v1, /healthz, /readyz, /metrics to :8087
-```
 
 ### Drawing coverage areas on the map
 
