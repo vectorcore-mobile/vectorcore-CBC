@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+  <identifier>wea-4i38ie-1785643745355</identifier>
+  <sender>Montgomery</sender>
+  <sent>2026-08-02T04:09:05Z</sent>
+  <status>Actual</status>
+  <msgType>Alert</msgType>
+  <scope>Public</scope>
+  <info>
+    <category>Met</category>
+    <event>Imminent Threat</event>
+    <urgency>Immediate</urgency>
+    <severity>Severe</severity>
+    <certainty>Observed</certainty>
+    <effective>2026-08-02T04:09:05Z</effective>
+    <language>en-US</language>
+    <headline>Tornado Warning: Montgomery County</headline>
+    <description>A tornado has been observed in Montgomery County. Seek shelter immediately. This is a Severe Weather Alert.</description>
+    <instruction>Go to a basement, storm cellar, or interior room on the lowest floor. Stay away from windows and doors. If no underground shelter is available, go to an interior room or hallway on the lowest floor, away from windows and doors.</instruction>
+    <web></web>
+    <parameter>
+      <valueName>WEA</valueName>
+      <value>1</value>
+    </parameter>
+    <area>
+      <polygon>32.324276,-86.336060 32.319634,-86.208344 32.403154,-86.206970</polygon>
+
+      <areaDesc>Custom polygon (1)</areaDesc>
+    </area>
+  </info>
+</alert>

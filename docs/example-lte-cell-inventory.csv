@@ -1,0 +1,4 @@
+mcc,mnc,mnc_length,eci,enb_id,local_cell_id,tac,cell_name,mme_name,latitude,longitude,nominal_radius_m,azimuth_deg,beamwidth_deg,geometry_quality,source,source_record_id,source_version,active,coverage_geojson
+311,435,3,1048577,4096,1,1,Montgomery-Lab-Sector-1,MME1,32.3701,-86.3002,5000,30,65,engineered_polygon,manual,lab-cell-001,lab-2026-08-02,true,"{""type"":""Polygon"",""coordinates"":[[[-86.3100,32.3700],[-86.2850,32.3920],[-86.2580,32.3740],[-86.2730,32.3500],[-86.3100,32.3700]]]}"
+311,435,3,1048578,4096,2,1,Montgomery-Lab-Sector-2,MME1,32.3701,-86.3002,4500,150,65,sector_estimate,manual,lab-cell-002,lab-2026-08-02,true,
+311,435,3,1048833,4097,1,2,Montgomery-Lab-Site-2,MME2,32.3400,-86.2700,3500,,,point_radius,manual,lab-cell-003,lab-2026-08-02,true,

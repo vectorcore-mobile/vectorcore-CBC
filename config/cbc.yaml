@@ -1,0 +1,64 @@
+# VectorCore CBC configuration. The upstream CBE delivers CAP 1.2 alerts
+# using XEP-0127 (CAP over XMPP).
+server:
+  listen_address: "0.0.0.0:8087"
+  shutdown_timeout: "10s"
+database:
+  path: "data/cbc.db"
+  busy_timeout: "5s"
+  expiry_interval: "1m"
+cbs:
+  # Message Identifiers for standard CMAS/WEA categories (Presidential,
+  # Extreme/Severe threat by urgency+certainty, AMBER, Required Monthly
+  # Test, CMAS Exercise, and the WEA 3.0 additions Public Safety/
+  # State-Local-Test) are hardcoded per 3GPP TS 23.041 section 9.4.1.2.2 -
+  # they're fixed by the standard, not chosen per operator, so nothing needs
+  # setting here for those. default_message_identifier is used only when an
+  # alert doesn't match any CMAS category (e.g. a routine advisory). 0x111E
+  # is TS 23.041's "CMAS operator defined use" slot - the standard's own
+  # catch-all. Never point this at 0x1112 (Presidential) or any other
+  # hardcoded ID in atisMessageIdentifiers (internal/cbs/classify.go) -
+  # those must only be reached via classify()'s explicit matches, not this
+  # fallback, or unclassified alerts get sent as if genuinely Presidential.
+  default_message_identifier: 0x111E
+  # message_identifiers is a rare manual override, keyed by classification
+  # label (not raw CAP severity) - e.g. to override a hardcoded value for a
+  # deployment that needs something nonstandard. Empty here means every
+  # classified category uses its hardcoded atisMessageIdentifiers value.
+  message_identifiers: {}
+  # Safety default: alerts without a recognised cell/TA geocode are rejected.
+  allow_plmn_wide: false
+sbcap:
+  # Enable only after MME peer addresses and area targeting are approved.
+  enabled: true
+  plmn: "311-435"
+  repetition_period: 30
+  broadcasts: 4
+  response_timeout: "10s"
+  # The MME authorizes CBC peers by a single source IP (127.0.0.1); pin the
+  # outbound association there instead of the OS's default multi-homed bind.
+  local_address: "127.0.0.1"
+  peers:
+    - name: "mme-1"
+      address: "127.0.0.2:29168"
+cell_inventory:
+  # LTE cell/TAC/eNB/MME inventory import, export, and selection preview.
+  # Shares this file's database.path; there is no separate database.
+  enabled: true
+  max_import_size_bytes: 10485760
+  default_import_mode: "validate-only"
+logging:
+  level: "info"
+  file: "cbc.log"
+cbe:
+  address: "127.0.0.1:5222"
+  domain: "cbe.example.com"
+  username: "test"
+  password: "test"
+  resource: "vectorcore-cbc"
+  # plain: STARTTLS upgrade on port 5222; direct_tls: TLS from connection start.
+  tls_mode: "plain"
+  # Set true only for development with a CBE test certificate.
+  insecure_skip_verify: true
+  reconnect_min: "1s"
+  reconnect_max: "30s"

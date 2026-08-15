@@ -1,0 +1,20 @@
+[Unit]
+Description=VectorCore LTE Cell Broadcast Centre
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vectorcore-cbc
+Group=vectorcore-cbc
+ExecStart=/usr/local/bin/cbc -c /etc/vectorcore-cbc/cbc.yaml
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/vectorcore-cbc
+
+[Install]
+WantedBy=multi-user.target
