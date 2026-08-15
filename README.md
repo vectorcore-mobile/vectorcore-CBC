@@ -181,30 +181,3 @@ Drawn circles are approximated as polygons client-side, the same way CAP
 `<circle>` alerts are approximated server-side — both are plain
 degree-per-km math, not geodesic-accurate, consistent with the rest of the
 inventory's precision level.
-
-## Release gate
-
-Run this gate from a clean build host (pure Go toolchain only; no CGO, no
-external C libraries) before a release:
-
-```sh
-make verify VERSION=0.1.0
-```
-
-The gate runs unit and simulated-MME integration tests, the Go race detector,
-`go vet`, a versioned production build, and strict YAML configuration
-parsing.
-
-Before deployment, an operator must also verify the following in its
-controlled network:
-
-- The CBE certificate chain and XMPP credentials are loaded from the secret
-  store; `insecure_skip_verify` remains false.
-- Each MME SCTP address is reachable and has passed Write-Replace and
-  Stop-Warning acknowledgement tests for PLMN, TA, and cell targets.
-- The configured message identifiers, repetition period, and broadcast count
-  are approved for the operator's public-warning policy.
-- `/healthz`, `/readyz`, and `/metrics` are monitored, and the SQLite data
-  directory is backed up with access restricted to the service account.
-- The systemd unit is installed with `/var/lib/vectorcore-cbc` as its only
-  writable persistent path.
