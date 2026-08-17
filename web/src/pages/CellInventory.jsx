@@ -6,7 +6,10 @@ import { useToast } from '../components/Toast.jsx'
 import Spinner from '../components/Spinner.jsx'
 import Badge from '../components/Badge.jsx'
 import Modal from '../components/Modal.jsx'
+import DiscardConfirm from '../components/DiscardConfirm.jsx'
 import ShapeDrawMap from '../components/ShapeDrawMap.jsx'
+import { useDirtyState } from '../hooks/useDirtyState.js'
+import { useConfirmClose } from '../hooks/useConfirmClose.js'
 
 const GEOMETRY_QUALITIES = ['engineered_polygon', 'propagation_model', 'sector_estimate', 'point_radius', 'site_point', 'unknown']
 
@@ -32,12 +35,16 @@ export default function CellInventory() {
   const [previewMapOpen, setPreviewMapOpen] = useState(false)
 
   const [addOpen, setAddOpen] = useState(false)
-  const [form, setForm] = useState(EMPTY_CELL_FORM)
+  const [form, setForm, formDirty, resetForm] = useDirtyState(EMPTY_CELL_FORM)
   const [coverageArea, setCoverageArea] = useState(null)
   const [coverageMapOpen, setCoverageMapOpen] = useState(false)
   const [creating, setCreating] = useState(false)
   const [createErr, setCreateErr] = useState(null)
   const [deletingId, setDeletingId] = useState(null)
+
+  const closeAdd = () => setAddOpen(false)
+  const { requestClose: guardedCloseAdd, confirming: discardConfirming, confirmDiscard, cancelDiscard } =
+    useConfirmClose(formDirty || !!coverageArea, closeAdd)
 
   const { data: cellData, error, errorStatus, loading, refresh } = usePoller(() => getCells({ limit: 200 }), 15000)
 
@@ -48,7 +55,7 @@ export default function CellInventory() {
     : null
 
   function openAdd() {
-    setForm(EMPTY_CELL_FORM)
+    resetForm(EMPTY_CELL_FORM)
     setCoverageArea(null)
     setCreateErr(null)
     coverageMapRef.current?.clear()
@@ -307,7 +314,7 @@ export default function CellInventory() {
       />
 
       {addOpen && (
-        <Modal title="Add Cell" onClose={() => setAddOpen(false)} size="xl">
+        <Modal title="Add Cell" onClose={guardedCloseAdd} size="xl" closeOnBackdrop={false} closeOnEscape={false}>
           <form onSubmit={handleAddCell}>
             <div className="modal-body">
               {createErr && <div className="error-msg">{createErr}</div>}
@@ -424,10 +431,11 @@ export default function CellInventory() {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn" onClick={() => setAddOpen(false)}>Cancel</button>
+              <button type="button" className="btn" onClick={closeAdd}>Cancel</button>
               <button type="submit" className="btn btn-primary" disabled={creating}>{creating ? 'Creating…' : 'Create Cell'}</button>
             </div>
           </form>
+          <DiscardConfirm open={discardConfirming} onDiscard={confirmDiscard} onCancel={cancelDiscard} />
         </Modal>
       )}
 
